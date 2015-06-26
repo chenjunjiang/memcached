@@ -79,4 +79,16 @@ public class QuickTour {
 		client.prepend("yiibai", "redis");
 		System.out.println(client.get("yiibai"));
 	}
+	
+	@Test
+	public void testCas(){
+		client.set("yiibai", 900, "memcached");
+		System.out.println(client.get("yiibai"));
+		// 获取cas token，就是通过gets命令得到的最后一位数字
+		long casToken = client.gets("yiibai").getCas();
+		System.out.println(casToken);
+		// 设置新的数据
+		client.cas("yiibai", casToken, 900, "redis");
+		System.out.println(client.get("yiibai"));
+	}
 }
